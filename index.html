@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeHer — SOS Safety App</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="phone-frame" id="app">
+
+    <!-- STATUS BAR -->
+    <div class="status-bar">
+      <span id="clock">9:41</span>
+      <div class="status-icons"><span>📶</span><span>🔋</span></div>
+    </div>
+
+    <!-- HOME SCREEN -->
+    <div class="screen active" id="home">
+      <div class="home-header">
+        <div class="app-name">Safe<span>Her</span></div>
+        <div class="shield-badge">🛡 Protected</div>
+      </div>
+      <div class="safe-status">● You are safe</div>
+      <div class="sos-zone">
+        <div class="sos-outer-ring">
+          <div class="sos-mid-ring">
+            <button class="sos-button" id="sosBtn">
+              <span class="sos-label">SOS</span>
+              <span class="sos-sub">HOLD 3 SEC</span>
+            </button>
+          </div>
+        </div>
+        <div class="sos-hint">Press & hold for emergency alert<br>Sends GPS to your trusted contacts</div>
+      </div>
+      <div class="quick-actions">
+        <button class="quick-btn" id="fakeCallBtn">
+          <span class="icon">📞</span>
+          <span class="label">Fake Call</span>
+        </button>
+        <button class="quick-btn" id="recordBtn">
+          <span class="icon">🎙</span>
+          <span class="label">Record</span>
+        </button>
+        <button class="quick-btn" id="shareGpsBtn">
+          <span class="icon">📍</span>
+          <span class="label">Share GPS</span>
+        </button>
+      </div>
+      <div class="bottom-nav">
+        <button class="nav-item active" data-screen="home">🏠<br>Home</button>
+        <button class="nav-item" data-screen="contacts">👥<br>Contacts</button>
+        <button class="nav-item" data-screen="resources">📋<br>Resources</button>
+      </div>
+    </div>
+
+    <!-- ALERT COUNTDOWN SCREEN -->
+    <div class="screen" id="alert">
+      <div class="alert-header">
+        <div class="alert-title">🚨 Emergency Triggered</div>
+        <div class="alert-heading">Sending Alert In...</div>
+      </div>
+      <div class="countdown-zone">
+        <div class="countdown-ring">
+          <svg width="160" height="160" viewBox="0 0 160 160">
+            <circle class="bg" cx="80" cy="80" r="68"/>
+            <circle class="progress" id="progressCircle" cx="80" cy="80" r="68"
+              stroke-dasharray="427" stroke-dashoffset="0"/>
+          </svg>
+          <div class="countdown-number" id="countdownNum">5</div>
+        </div>
+        <div class="alert-message">
+          Your GPS location is being captured.<br>
+          Alert will be sent to <strong id="contactCount">3</strong> contacts.
+        </div>
+        <div class="alert-contacts" id="alertContactsList"></div>
+      </div>
+      <button class="cancel-btn" id="cancelBtn">✕ Cancel — I'm Safe</button>
+    </div>
+
+    <!-- ACTIVE ALERT SCREEN -->
+    <div class="screen" id="active-alert">
+      <div class="active-header">
+        <div class="live-badge">● LIVE</div>
+        <div class="active-title">Alert Active — Help is Coming</div>
+      </div>
+      <div class="map-area">
+        <div class="map-grid">
+          <svg class="map-roads" viewBox="0 0 335 180">
+            <line x1="0" y1="90" x2="335" y2="90" stroke="rgba(255,255,255,0.06)" stroke-width="12"/>
+            <line x1="167" y1="0" x2="167" y2="180" stroke="rgba(255,255,255,0.06)" stroke-width="8"/>
+          </svg>
+          <div class="map-label">📍 GPS LIVE</div>
+          <div class="location-pin">
+            <div class="pin-dot"></div>
+            <div class="pin-coords" id="liveCoords">Fetching location...</div>
+          </div>
+        </div>
+      </div>
+      <div class="active-stats">
+        <div class="stat-card"><div class="stat-value" id="elapsed">0:00</div><div class="stat-label">Elapsed</div></div>
+        <div class="stat-card"><div class="stat-value" id="notifCount">3</div><div class="stat-label">Notified</div></div>
+        <div class="stat-card"><div class="stat-value" style="color:var(--safe-green)">●REC</div><div class="stat-label">Audio</div></div>
+      </div>
+      <div class="notified-list">
+        <div class="notified-title">Contacts Notified</div>
+        <div id="notifiedContactsList"></div>
+      </div>
+      <button class="safe-now-btn" id="safeNowBtn">✅ I Am Safe Now</button>
+    </div>
+
+    <!-- CONTACTS SCREEN -->
+    <div class="screen" id="contacts">
+      <div class="screen-header">
+        <div class="screen-title">Trusted Contacts</div>
+        <div class="screen-sub">These people will be alerted in an emergency</div>
+      </div>
+      <div class="contacts-list" id="contactsList"></div>
+      <div class="bottom-nav light">
+        <button class="nav-item" data-screen="home">🏠<br>Home</button>
+        <button class="nav-item active" data-screen="contacts">👥<br>Contacts</button>
+        <button class="nav-item" data-screen="resources">📋<br>Resources</button>
+      </div>
+    </div>
+
+    <!-- RESOURCES SCREEN -->
+    <div class="screen" id="resources">
+      <div class="screen-header">
+        <div class="screen-title">Help & Resources</div>
+        <div class="screen-sub">Tap any number to call immediately</div>
+      </div>
+      <div class="helplines" id="helplinesList"></div>
+      <div class="bottom-nav light">
+        <button class="nav-item" data-screen="home">🏠<br>Home</button>
+        <button class="nav-item" data-screen="contacts">👥<br>Contacts</button>
+        <button class="nav-item active" data-screen="resources">📋<br>Resources</button>
+      </div>
+    </div>
+
+    <!-- FAKE CALL OVERLAY -->
+    <div id="fake-call">
+      <div class="fake-call-caller">
+        <div class="caller-avatar">👩</div>
+        <div class="caller-name" id="fakeCallerName">Mom</div>
+        <div class="caller-status">Incoming Call...</div>
+      </div>
+      <div class="call-actions">
+        <div class="call-btn-wrapper">
+          <button class="call-btn call-decline" id="declineBtn">📵</button>
+          <div class="call-btn-name">Decline</div>
+        </div>
+        <div class="call-btn-wrapper">
+          <button class="call-btn call-accept" id="acceptBtn">📞</button>
+          <div class="call-btn-name">Accept</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+        </html>
